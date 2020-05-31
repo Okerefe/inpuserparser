@@ -1,0 +1,20 @@
+{
+    "name": "okerefe/inpuserparser",
+    "description": "Package That Parses User Data",
+    "type": "wordpress-plugin",
+    "license": "GPL 3.0",
+    "authors": [
+        {
+            "name": "Umukoro Okerefe",
+            "email": "okerefe@gmail.com"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "admin/"
+        ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}

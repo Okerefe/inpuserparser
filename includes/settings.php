@@ -190,9 +190,22 @@ class Settings
         echo "Customize the Columns that are visible to the Users";
     }
 
+//    Validate Submitted Request and Reset Default Values
     public static function validateOptions(array $input) : array
     {
-        // todo: add validation functionality..
+        foreach (self::usedFields() as $field) {
+            $input['column_settings_' . $field] = ((int) $input['column_settings_' . $field] === 1 ? 1 : 0);
+            $input['search_settings_' . $field] = ((int) $input['search_settings_' . $field] === 1 ? 1 : 0);
+        }
+        foreach (self::defaultColumns() as $field) {
+            $input['column_settings_' . $field] = 1;
+        }
+
+        if (!array_key_exists($input['search_settings_visible'], self::searchRadioOptions())) {
+            $input['search_settings_visible'] = null;
+        }
+        $input['search_settings_visible'] = $input['search_settings_visible'] ?? null;
+
         return $input;
     }
 

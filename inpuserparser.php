@@ -14,8 +14,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
+
 if (is_admin()) {
-    require_once plugin_dir_path(__FILE__) . 'settings.php';
     add_action('init', ['InpUserParser\Settings', 'init']);
     register_activation_hook(__FILE__, ['InpUserParser\Settings', 'install']);
     register_uninstall_hook(__FILE__, ['InpUserParser\Settings', 'uninstall']);

@@ -1,73 +1,71 @@
 <?php declare(strict_types = 1);
 
 namespace InpUserParser;
+/*
+ * Handles Display of InpUserSettings Page
+ * Handles Saving and Retrieving of Options
+ * */
 
 class Settings
 {
-
-    /*
-     * Name
-     * username
-     * email
-     * street address
-     * phone
-     * website
-     * company name
-     *
-     */
     const SETTINGS_PAGE = 'inpuserparser';
     const SEARCH_SECTION_ID = 'inpuserparser_search_settings';
     const COLUMN_SECTION_ID = 'inpuserparser_column_settings';
     const OPTION_NAME = 'inpuserparser_options';
 
+//     Set Necessary Wordpress Hooks
     public static function init()
     {
         add_action('admin_menu', ['InpUserParser\Settings', 'addMenu']);
         add_action('admin_init', ['InpUserParser\Settings', 'registerSettings']);
+        add_filter(
+            'plugin_action_links_inpuserparser/inpuserparser.php',
+            ['InpUserParser\Settings', 'addSettingsLink']
+        );
     }
 
     public static function install()
     {
     }
 
+//    Generate Link to InpUserSettings Page
+    public static function getSettingsLink() : string
+    {
+        $url = esc_url(add_query_arg(
+            'page',
+            self::SETTINGS_PAGE,
+            get_admin_url() . 'admin.php'
+        ));
+        // Create the link.
+        return "<a href='$url'>Settings</a>";
+    }
+
+//    Add Link to InpUserSettings on plugin page
+    public static function addSettingsLink(array $links) : array
+    {
+        // Adds the link to the end of the array.
+        array_push(
+            $links,
+            self::getSettingsLink()
+        );
+        return $links;
+    }
+
     public static function uninstall()
     {
         delete_option(self::OPTION_NAME);
+        delete_transient(User::USERS_TRANSIENT);
     }
 
-    public static function ucFields(string $field): string
+//    Reformat camelCased Strings
+    public static function ucFields(string $field) : string
     {
         return ucwords(preg_replace('/(?<!\ )[A-Z]/', ' $0', $field));
     }
 
-    public static function defaultColumns() : array
-    {
-        return[
-                'id',
-                'name',
-                'username',
-                ];
-    }
-
-    public static function usedFields() : array
-    {
-            return[
-                'id',
-                'name',
-                'username',
-                'email',
-                'streetAddress',
-                'phone',
-                'website',
-                'companyName',
-            ];
-    }
-
+//    Add Plugin to to subMenu
     public static function addMenu()
     {
-        /*
-         * Add Plugin to to subMenu
-         */
         add_submenu_page(
             'options-general.php',
             'InpUserParse Settings',
@@ -78,6 +76,7 @@ class Settings
         );
     }
 
+//    Display Settings Page
     public static function displayPage()
     {
         // check if user is allowed access
@@ -86,7 +85,8 @@ class Settings
         }
         ?>
         <div class="wrap">
-            <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+            <h1><?php echo esc_html(get_admin_page_title()) . ''; ?></h1>
+            <a href="<?php echo get_bloginfo('url') . '/?' .self::SETTINGS_PAGE;?>"> Preview InpuserPage Page</a>
             <form action="options.php" method="post">
 
                 <?php
@@ -95,22 +95,19 @@ class Settings
                 settings_fields(self::OPTION_NAME);
 
                 // output setting sections
-                do_settings_sections('inpuserparser');
+                do_settings_sections(self::SETTINGS_PAGE);
 
                 // submit button
                 submit_button();
-
                 ?>
-
             </form>
         </div>
-
         <?php
     }
 
     /*
      * All settings Creation Functionalities
-     * The Different Settings Options are dynamically Created from a set of predefined fields
+     * The Different Settings Options are dynamically Created from a set of predefined fields from User Class
      * */
     public static function registerSettings()
     {
@@ -137,6 +134,7 @@ class Settings
         self::generateFields();
     }
 
+//    Dynamically generate Settings Fields
     public static function generateFields()
     {
         // Add Search Visibility Field
@@ -150,7 +148,7 @@ class Settings
         );
 
         // Loops Through Used Fields and Generate Settings Fields for both Settings Section..
-        foreach (self::usedFields() as $field) {
+        foreach (User::usedFields() as $field) {
             // Generate Column Settings Check Fields
             add_settings_field(
                 'column_settings_' . $field,
@@ -180,6 +178,43 @@ class Settings
         }
     }
 
+//    Returns VisibleSearchFields Mostly Used By InpUserPage Class and Request Class
+    public static function visibleSearchFields() : array
+    {
+        $visibleSearches = [];
+        $options = get_option(self::OPTION_NAME, self::defaultOptions());
+        foreach (User::usedFields() as $field) {
+            if ((int) $options['search_settings_' . $field] === 1) {
+                $visibleSearches[] = $field;
+            }
+        }
+
+        if ($options['search_settings_visible'] == 'disable') {
+            return [];
+        }
+        return $visibleSearches;
+    }
+
+//    Returns VisibleColumnsFields Mostly Used By InpUserPage Class and Request Class
+    public static function visibleColumns() : array
+    {
+        $visibleColumns = [];
+        foreach (User::defaultColumns() as $column) {
+            $visibleColumns[] = $column;
+        }
+        $options = get_option(self::OPTION_NAME, self::defaultOptions());
+
+        foreach (User::usedFields() as $field) {
+            if (in_array($field, $visibleColumns, true)) {
+                continue;
+            }
+            if ((int) $options['column_settings_' . $field] === 1) {
+                $visibleColumns[] = $field;
+            }
+        }
+        return $visibleColumns;
+    }
+
     public static function searchSettingsCallback()
     {
         echo "Customize the search Options Visible to the Users";
@@ -193,12 +228,9 @@ class Settings
 //    Validate Submitted Request and Reset Default Values
     public static function validateOptions(array $input) : array
     {
-        foreach (self::usedFields() as $field) {
-            $input['column_settings_' . $field] = ((int) $input['column_settings_' . $field] === 1 ? 1 : 0);
-            $input['search_settings_' . $field] = ((int) $input['search_settings_' . $field] === 1 ? 1 : 0);
-        }
-        foreach (self::defaultColumns() as $field) {
-            $input['column_settings_' . $field] = 1;
+        foreach (User::usedFields() as $field) {
+            $input['column_settings_' . $field] = ((int) $input['column_settings_' . $field] ===  1 ? 1 : 0);
+            $input['search_settings_' . $field] = ((int) $input['search_settings_' . $field] ===  1 ? 1 : 0);
         }
 
         if (!array_key_exists($input['search_settings_visible'], self::searchRadioOptions())) {
@@ -206,18 +238,22 @@ class Settings
         }
         $input['search_settings_visible'] = $input['search_settings_visible'] ?? null;
 
+        foreach (User::defaultColumns() as $field) {
+            $input['column_settings_' . $field] = 1;
+        }
         return $input;
     }
 
+//    Returns Default Options of Search Fields
     public static function defaultOptions() : array
     {
         $returnArray = [];
-        foreach (self::usedFields() as $field) {
+        foreach (User::usedFields() as $field) {
             $returnArray['search_settings_' . $field] = false;
             $returnArray['column_settings_' . $field] =
-                in_array((string) $field, self::defaultColumns(), true) ? true : false;
+                in_array((string) $field, User::defaultColumns(), true) ? true : false;
         }
-        $returnArray['search_settings_visible'] = 'enable';
+        $returnArray['search_settings_visible'] = 'disable';
         return $returnArray;
     }
 
@@ -229,9 +265,9 @@ class Settings
         ];
     }
 
+//   Array of Whitelisted Tags and Attributes
     public static function allowedTags() : array
     {
-//        Array of Whitelisted Tags and Attributes
         return [
             'input' => [
                 'id' => [],
@@ -248,11 +284,11 @@ class Settings
         ];
     }
 
+//    Generate Radio Fields for Settings Page
     public static function generateRadioField(array $args)
     {
         $options = get_option(self::OPTION_NAME, self::defaultOptions());
         $id = $args['id'] ?? '';
-        $label = $args['label'] ?? '';
 
         $selectedOptions = isset($options[$id]) ? sanitize_text_field($options[$id]) : '';
         $radioOptions = self::searchRadioOptions();
@@ -267,13 +303,16 @@ class Settings
         }
     }
 
+//    Generate Check Fields for Settings Page
     public static function generateCheckField(array $args)
     {
+//        get saved or default values
         $options = get_option(self::OPTION_NAME, self::defaultOptions());
         $id = $args['id'] ?? '';
         $label = $args['label'] ?? '';
         $checked = isset($options[$id]) ? checked($options[$id], 1, false) : '';
 
+//        Disable Necessary columns checkbox so They cant be Edited By Admin
         $disabled = "";
         if ($args['section'] === self::COLUMN_SECTION_ID) {
             if (self::defaultOptions()[$id]) {
@@ -281,6 +320,14 @@ class Settings
             }
         }
 
+//         Disable all Search Checkbox if search_settings_visible is Disabled
+        if ($args['section'] === self::SEARCH_SECTION_ID) {
+            if ((string) $options['search_settings_visible'] === 'disable') {
+                $disabled = "disabled";
+            }
+        }
+
+//         Generate Check Box Output
         $output = '<input id="'.self::OPTION_NAME.'_'. $id .
             '" name="'.self::OPTION_NAME.'['. $id .']" type="checkbox" value="1"'.
             $checked . ' ' . $disabled . '> ';

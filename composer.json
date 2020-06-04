@@ -11,8 +11,11 @@
     ],
     "autoload": {
         "classmap": [
-            "admin/"
+            "includes/"
         ]
+    },
+    "require": {
+        "ext-json": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",

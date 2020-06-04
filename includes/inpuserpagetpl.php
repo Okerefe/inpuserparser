@@ -28,12 +28,14 @@ $ajaxUrl = admin_url('admin-ajax.php');
 <section class="container">
     <br><br><br>
 
-    <h2>InpUserParser</h2>
-    <p>View and Search for User Details..</p>
+    <h2><?php echo esc_html__('InpUserParser', 'inpuserparser'); ?></h2>
+    <p><?php echo esc_html__('View and Search for User Details from: ', 'inpuserparser'); ?>
+        <a href="#" onclick="return false;">https://jsonplaceholder.typicode.com/users</a></p>
 
         <?php
         if (current_user_can('manage_options')) {
-            echo '<p>Visit InpUserParser '.InpUserParser\Settings::getSettingsLink().'</p>';
+            echo '<p>'.esc_html__('Visit InpUserParser', 'inpuserparser').' '
+                .InpUserParser\Settings::getSettingsLink().'</p>';
         }
 
         $selectMarkUp = "<br><br>";
@@ -46,7 +48,8 @@ $ajaxUrl = admin_url('admin-ajax.php');
             </div>
 
             <div class="col-2" style="margin:0px;padding:0px;border-style:none;">
-                <input type="text" value="Search By:" disabled class="form-control"/>
+                <input type="text" value="<?php echo esc_html__('Search By:', 'inpuserparser')?>"
+                       disabled class="form-control"/>
             </div>
 
             <select class="browser-default custom-select form-control col-2" id="select_options">

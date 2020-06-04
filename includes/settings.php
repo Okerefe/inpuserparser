@@ -86,7 +86,8 @@ class Settings
         ?>
         <div class="wrap">
             <h1><?php echo esc_html(get_admin_page_title()) . ''; ?></h1>
-            <a href="<?php echo get_bloginfo('url') . '/?' .self::SETTINGS_PAGE;?>"> Preview InpuserPage Page</a>
+            <a href="<?php echo get_bloginfo('url') . '/?' .self::SETTINGS_PAGE;?>"><?php
+                echo esc_html__('Preview InpuserParser Page', 'inpuserparser')?></a>
             <form action="options.php" method="post">
 
                 <?php
@@ -119,14 +120,14 @@ class Settings
 
         add_settings_section(
             self::COLUMN_SECTION_ID,
-            'Customize Visible Columns',
+            esc_html__('Customize Visible Columns', 'inpuserparser'),
             ['InpUserParser\Settings', 'columnSettingsCallback'],
             self::SETTINGS_PAGE
         );
 
         add_settings_section(
             self::SEARCH_SECTION_ID,
-            'Customize Visible Search Parameters',
+            esc_html__('Customize Visible Search Parameters', 'inpuserparser'),
             ['InpUserParser\Settings', 'searchSettingsCallback'],
             self::SETTINGS_PAGE
         );
@@ -140,7 +141,7 @@ class Settings
         // Add Search Visibility Field
         add_settings_field(
             'search_settings_visible',
-            'Enable Search Feature',
+            esc_html__('Enable Search Feature', 'inpuserparser'),
             ['InpUserParser\Settings', 'generateRadioField'],
             self::SETTINGS_PAGE,
             self::SEARCH_SECTION_ID,
@@ -152,12 +153,13 @@ class Settings
             // Generate Column Settings Check Fields
             add_settings_field(
                 'column_settings_' . $field,
-                self::ucFields($field) . ' Column Visibility',
+                self::ucFields($field) . esc_html__(' Column Visibility', 'inpuserparser'),
                 ['InpUserParser\Settings', 'generateCheckField'],
                 self::SETTINGS_PAGE,
                 self::COLUMN_SECTION_ID,
                 [   'id' => 'column_settings_' . $field,
-                    'label' => 'Set ' . self::ucFields($field) . ' Column Visiblility',
+                    'label' => esc_html__('Set ', 'inpuserparser') . self::ucFields($field) .
+                        esc_html__(' Column Visibility', 'inpuserparser'),
                     'section' => self::COLUMN_SECTION_ID,
                 ]
             );
@@ -165,13 +167,14 @@ class Settings
             // Generate Search Settings Check Fields
             add_settings_field(
                 'search_settings_' . $field,
-                self::ucFields($field) . ' Search Feature',
+                self::ucFields($field) . esc_html__('  Search Feature', 'inpuserparser'),
                 ['InpUserParser\Settings', 'generateCheckField'],
                 self::SETTINGS_PAGE,
                 self::SEARCH_SECTION_ID,
                 [
                     'id' => 'search_settings_' . $field,
-                    'label' => 'Enable ' . self::ucFields($field) . ' Column Search',
+                    'label' => esc_html__('Enable ', 'inpuserparser') . self::ucFields($field) .
+                        esc_html__(' Column Search', 'inpuserparser'),
                     'section' => self::SEARCH_SECTION_ID,
                 ]
             );
@@ -217,12 +220,12 @@ class Settings
 
     public static function searchSettingsCallback()
     {
-        echo "Customize the search Options Visible to the Users";
+        echo esc_html__('Customize the search Options Visible to the Users', 'inpuserparser');
     }
 
     public static function columnSettingsCallback()
     {
-        echo "Customize the Columns that are visible to the Users";
+        echo esc_html__('Customize the Columns that are visible to the Users', 'inpuserparser');
     }
 
 //    Validate Submitted Request and Reset Default Values
@@ -260,8 +263,8 @@ class Settings
     public static function searchRadioOptions() : array
     {
         return [
-            'enable' => 'Enable Search',
-            'disable' => 'Disable Search',
+            'enable' => esc_html__('Enable Search', 'inpuserparser'),
+            'disable' => esc_html__('Disable Search', 'nipuserparser'),
         ];
     }
 

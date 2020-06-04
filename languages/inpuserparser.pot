@@ -1,0 +1,97 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: InpUserParser\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-06-04 17:12+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.4.0; wp-5.3"
+
+#: includes/settings.php:170
+msgid "  Search Feature"
+msgstr ""
+
+#: includes/settings.php:177
+msgid " Column Search"
+msgstr ""
+
+#: includes/settings.php:156 includes/settings.php:162
+msgid " Column Visibility"
+msgstr ""
+
+#: includes/settings.php:228
+msgid "Customize the Columns that are visible to the Users"
+msgstr ""
+
+#: includes/settings.php:223
+msgid "Customize the search Options Visible to the Users"
+msgstr ""
+
+#: includes/settings.php:123
+msgid "Customize Visible Columns"
+msgstr ""
+
+#: includes/settings.php:130
+msgid "Customize Visible Search Parameters"
+msgstr ""
+
+#: includes/settings.php:176
+msgid "Enable "
+msgstr ""
+
+#: includes/settings.php:266
+msgid "Enable Search"
+msgstr ""
+
+#: includes/settings.php:144
+msgid "Enable Search Feature"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://deravenedwriter.com/"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://github.com/"
+msgstr ""
+
+#. Name of the plugin
+msgid "InpUserParser"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Parse and Perform Different Search Transactions on a Custom Users Class."
+msgstr ""
+
+#: includes/settings.php:90
+msgid "Preview InpuserParser Page"
+msgstr ""
+
+#: includes/inpuserpagetpl.php:50
+msgid "Search By:"
+msgstr ""
+
+#: includes/settings.php:161
+msgid "Set "
+msgstr ""
+
+#. Author of the plugin
+msgid "Umukoro Okerefe"
+msgstr ""
+
+#: includes/inpuserpagetpl.php:32
+msgid "View and Search for User Details.."
+msgstr ""
+
+#: includes/inpuserpagetpl.php:36
+msgid "Visit InpUserParser"
+msgstr ""

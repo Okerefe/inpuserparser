@@ -4,6 +4,8 @@ Plugin Name: InpUserParser
 Description: Parse and Perform Different Search Transactions on a Custom Users Class.
 Plugin URI:  https://github.com/
 Author: Umukoro Okerefe
+Text Domain: inpuserparser
+Domain Path: /languages
 Author URI: https://deravenedwriter.com/
 Author:      Umukoro Okerefe
 Version:     1.0
@@ -33,3 +35,5 @@ add_action('wp_ajax_inpuserparser_hook', ['InpUserParser\Request', 'handle']);
 
 // ajax Ajax hook for non-logged-in users
 add_action('wp_ajax_nopriv_inpuserparser_hook', ['InpUserParser\Request', 'handle']);
+
+add_action('plugins_loaded', ['InpUserParser\InpUserPage', 'loadTextDomain']);

@@ -19,6 +19,11 @@ class InpUserPage
         add_action('parse_request', ['InpUserParser\InpUserPage', 'parseRequest']);
     }
 
+    public static function loadTextDomain()
+    {
+        load_plugin_textdomain('inpuserparser', false, plugin_dir_path(__FILE__) . 'languages/');
+    }
+
     public static function addRewriteRule()
     {
         add_rewrite_rule('^'.self::QUERY_VAR . '/?$', 'index.php?'.self::QUERY_VAR.'=1', 'top');

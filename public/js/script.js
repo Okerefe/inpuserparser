@@ -36,21 +36,15 @@ const handleResponse = (jsonResponse, requestType) =>
     }
     if (requestType == ID_REQUEST) {
         if (json.success == 'true') {
-            console.log(json);
+            // console.log(json);
             // fieldValues = Object.keys(json.reply)
             for (let [key, value] of Object.entries(json.reply)) {
                 _id(key).innerHTML = value
-                console.log(`${key}: ${value}`);
+                // console.log(`${key}: ${value}`);
                 $('#modal-spinner-cover').slideUp(500, function () {
                     $('#user-contents').slideDown(500);
                 });
             }
-            // console.log(fieldValues);
-            // for (var key in fieldValues) {
-            //     _id(key).innerHTML = fieldValues[key]
-            //     console.log(key, value);
-
-            // }
         }
         if (json.success == 'false') {
             console.log("False Request");
@@ -62,7 +56,6 @@ const handleResponse = (jsonResponse, requestType) =>
     }
 
 }
-
 
 /*
 Request Function that Handles all Request to Server
@@ -97,15 +90,15 @@ const request = (requestType, param="", column='') =>
             return;
     }
     if ((requestType == ID_REQUEST || requestType == SEARCH_REQUEST) && param == "") {
-        console.log("Param is Null");
+        // console.log("Param is Null");
         return;
     }
     if (requestType == SEARCH_REQUEST && column=='') {
-        console.log("Column is Null");
+        // console.log("Column is Null");
         return;
     }
-    console.log("Requestong...");
-    console.log(ajax_url);
+    // console.log("Requestong...");
+    // console.log(ajax_url);
 
     $.ajax({
         type: "POST",
@@ -113,7 +106,7 @@ const request = (requestType, param="", column='') =>
         data: data,
         timeout: 6000,
         success: function (response) {
-            console.log(response);
+            // console.log(response);
             handleResponse(response, requestType);
         },
         error: function (jqXHR, textStatus, errorThrown) {

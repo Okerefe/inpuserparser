@@ -1,14 +1,15 @@
 <?php declare(strict_types = 1);
 /*
 Plugin Name: InpUserParser
-Description: Parse and Perform Different Search Transactions on a Custom Users Class.
+Description: Parse and Perform Different Search Transactions From a custom REST API endpoint.
 Plugin URI:  https://github.com/
 Author: Umukoro Okerefe
 Text Domain: inpuserparser
 Domain Path: /languages
 Author URI: https://deravenedwriter.com/
-Author:      Umukoro Okerefe
 Version:     1.0
+License: GPL v2 or later
+License URI:  https://www.gnu.org/licenses/gpl-2.0.txt
 */
 
 // Exit if File is called Directly

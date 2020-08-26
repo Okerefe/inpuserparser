@@ -4,7 +4,7 @@ Description: Parse and Perform Different Search Transactions on a Custom Users C
 Plugin URI:  https://github.com/
 Author: Umukoro Okerefe
 Text Domain: inpuserparser
-Domain Path: /languages
+Domain Path: /lang
 Author URI: https://deravenedwriter.com/
 License:           GPL v2 or later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.txt

@@ -14,6 +14,7 @@ const _id = (id="") => {
     }
     return document.getElementById(id);
 }
+
 /*.............................*/
 
 const handleResponse = (jsonResponse, requestType) =>

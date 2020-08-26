@@ -1,12 +1,8 @@
 <?php
-$scriptUrl = plugins_url('../public/js/script.js', __FILE__);
-$styleUrl = plugins_url('../public/css/style.css', __FILE__);
-$nonce = wp_create_nonce('inpuserparser_hook');
-$ajaxUrl = admin_url('admin-ajax.php');
-
-/*
- * Html Mark Up for InpUserParser Public Page
- * */
+// Exit if File is called Directly
+if (!defined('ABSPATH')) {
+exit;
+}
 ?>
 <!Doctype html>
 <html lang="en">
@@ -18,57 +14,45 @@ $ajaxUrl = admin_url('admin-ajax.php');
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
-    <link rel="stylesheet" href="<?php echo esc_url($styleUrl); ?>">
+    <link rel="stylesheet" href="{{ page.styleUrl }}">
     <script>
-        const nonce = '<?php echo esc_attr($nonce);?>';
-        const ajax_url = '<?php echo esc_url($ajaxUrl);?>';
+        const nonce = '{{ page.nonce }}';
+        const ajax_url = '{{ page.ajaxUrl }}';
     </script>
 </head>
 <body>
 <section class="container">
     <br><br><br>
+    <h2>{{ page.heading }}</h2>
+    <p>{{ page.viewSearchText }}<a href="#" onclick="return false;">https://jsonplaceholder.typicode.com/users</a></p>
+    {% if page.canManageOptions %}
+        {{ page.settingsText | raw }}
+    {% endif %}
 
-    <h2><?php echo esc_html__('InpUserParser', 'inpuserparser'); ?></h2>
-    <p><?php echo esc_html__('View and Search for User Details from: ', 'inpuserparser'); ?>
-        <a href="#" onclick="return false;">https://jsonplaceholder.typicode.com/users</a></p>
-
-        <?php
-        if (current_user_can('manage_options')) {
-            echo '<p>'.esc_html__('Visit InpUserParser', 'inpuserparser').' '
-                .InpUserParser\Settings::getSettingsLink().'</p>';
-        }
-
-        $selectMarkUp = "<br><br>";
-        if (!empty(InpUserParser\Settings::visibleSearchFields())) {
-            ?>
-        <!-- Search form Section-->
-        <div class="row" style="padding: 2px;">
-            <div class="md-form active-purple active-purple-2 mb-3 mt-0 col-8" style="margin: 0px !important; padding:0px;border-style: none;">
-                <input class="form-control" type="text" placeholder="Search By" id="search-input" aria-label="Search">
-            </div>
-
-            <div class="col-2" style="margin:0px;padding:0px;border-style:none;">
-                <input type="text" value="<?php echo esc_html__('Search By:', 'inpuserparser')?>"
-                       disabled class="form-control"/>
-            </div>
-
-            <select class="browser-default custom-select form-control col-2" id="select_options">
-                <?php
-                $selectMarkUp = "";
-                foreach (InpUserParser\Settings::visibleSearchFields() as $field) {
-                    $selectMarkUp .= '<option value="'.$field.'">'.InpUserParser\Settings::ucFields($field).'</option>';
-                }
-                echo $selectMarkUp;
-                $selectMarkUp = "";
-                ?>
-            </select>
-
+    {% if page.isSearchFields %}
+    <!-- Search form Section-->
+    <div class="row" style="padding: 2px;">
+        <div class="md-form active-purple active-purple-2 mb-3 mt-0 col-8" style="margin: 0px !important; padding:0px;border-style: none;">
+            <input class="form-control" type="text" placeholder="Search By" id="search-input" aria-label="Search">
         </div>
-            <?php
-        }
 
-            echo $selectMarkUp;
-        ?>
+        <div class="col-2" style="margin:0px;padding:0px;border-style:none;">
+            <input type="text"
+                   value="{{ page.searchByText }}"
+                   class="form-control"
+                   disabled/>
+        </div>
+
+        <select class="browser-default custom-select form-control col-2" id="select_options">
+        {% for field in page.searchFields %}
+           <option value="{{ field }}">{{ page.ucField(field) }}</option>
+        {% endfor %}
+        </select>
+    </div>
+
+    {% else %}
+        <br/><br/>
+    {% endif %}
 
     <br><br>
 
@@ -103,7 +87,7 @@ $ajaxUrl = admin_url('admin-ajax.php');
                     <p><span class="label">Name:</span> <span class="value" id="name">Donald J Trump</span> </p>
                     <p><span class="label">Username:</span> <span class="value" id="username">Donald J Trump</span> </p>
                     <p><span class="label">Email    :</span> <span class="value" id="email">Donald J Trump</span> </p>
-                <p><span class="label">Address:</span></p>
+                    <p><span class="label">Address:</span></p>
                     <p><span class="label">&emsp;Street:</span>  <span class="value" id="street">Kulas Light</span></p>
                     <p><span class="label">&emsp;Suite:</span>  <span class="value" id="suite">Kulas Light</span></p>
                     <p><span class="label">&emsp;City:</span>  <span class="value" id="city">Kulas Light</span></p>
@@ -143,6 +127,6 @@ $ajaxUrl = admin_url('admin-ajax.php');
         crossorigin="anonymous">
 </script>
 
-<script src="<?php echo esc_url($scriptUrl); ?>"></script>
+<script src="{{ page.scriptUrl }}"></script>
 </body>
 </html>

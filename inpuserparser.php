@@ -2,10 +2,10 @@
 /*
 Plugin Name: InpUserParser
 Description: Parse and Perform Different Search Transactions From a custom REST API endpoint.
-Plugin URI:  https://github.com/
+Plugin URI:  https://github.com/Okerefe/InpuserParser
 Author: Umukoro Okerefe
 Text Domain: inpuserparser
-Domain Path: /languages
+Domain Path: /lang
 Author URI: https://deravenedwriter.com/
 Version:     1.0
 License: GPL v2 or later
@@ -17,24 +17,22 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
-require_once plugin_dir_path(__FILE__) . 'includes/inpuserpage.php';
-require_once plugin_dir_path(__FILE__) . 'includes/request.php';
-require_once plugin_dir_path(__FILE__) . 'includes/user.php';
+//Load Required Dependencies with autoload
+require 'vendor/autoload.php';
 
 
-if (is_admin()) {
-    add_action('init', ['InpUserParser\Settings', 'init']);
-    register_activation_hook(__FILE__, ['InpUserParser\Settings', 'install']);
-    register_uninstall_hook(__FILE__, ['InpUserParser\Settings', 'uninstall']);
+//Load and Initialize Setting Functionality if user is an admin
+if (\is_admin()) {
+    $settings = new \InpUserParser\Settings();
+    add_action('init', [$settings, 'init']);
+    register_uninstall_hook(__FILE__, [$settings, 'uninstall']);
 }
 
-add_action('init', ['InpUserParser\InpUserPage', 'init']);
+//We load the init method of the InpUserPage Class,
+//which activates all hooks and functionalities for displaying the Page
+add_action('init', [(new \InpUserParser\InpUserParserPage()), 'init']);
 
-// ajax Ajax hook for logged-in users
-add_action('wp_ajax_inpuserparser_hook', ['InpUserParser\Request', 'handle']);
 
-// ajax Ajax hook for non-logged-in users
-add_action('wp_ajax_nopriv_inpuserparser_hook', ['InpUserParser\Request', 'handle']);
-
-add_action('plugins_loaded', ['InpUserParser\InpUserPage', 'loadTextDomain']);
+//We load the init method of the Request class
+//which activates all hooks and functionalities for Processing all Ajax Requests
+add_action('init', [(new \InpUserParser\Request()), 'init']);

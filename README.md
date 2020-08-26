@@ -3,36 +3,37 @@
 ![Screenshot of the InpUserParser Public Facing Page](public/img/inpuser_shot.png)
 
 ### About
- InpUserParser is a lightweight and easy to install Wordpress plugin.
+>InpUserParser is a lightweight and easy to install Wordpress plugin.
 It Offers comprehensive parsing of user data from a specific REST API endpoint : [`https://jsonplaceholder.typicode.com/users`](https://jsonplaceholder.typicode.com/users)
+>[![GPLv2 License](https://img.shields.io/badge/license-GPL--2.0-orange)](https://github.com/10up/wp_mock/blob/trunk/LICENSE.md)
 
 
 
 ### Requirements:
-To install and get the plugin running. all that is needed is a Wordpress installation and git already installed.
+To install and get the plugin running. all that is needed is a Wordpress installation and git and composer already installed.
 It is also essential that PHP 7+ is available
 
 
 ### Installation:
-The Plugin could be installed easily by cloning its repository into any Wordpress installation
-This is all that is needed to get it working cause it doesn't have any critical external dependencies
-
-Although to run the unit tests that come with the plugin, the composer dependencies have to be installed since the unit tests installation is project-based
-
+The Plugin could be installed easily by cloning its repository into any Wordpress installation plugin directory
+and then pulling the composer dependencies
 to install the plugin, cd into your Wordpress plugin directory as shown
 
-
-```$ cd <wordpress-core path>/wp-content/plugins```
+```bash
+$ cd <wordpress-core path>/wp-content/plugins
+```
 
 when you are in the plugin folder, clone the repo
 
-```git clone https://username@bitbucket.org/ravenedwriter/inpuserparser.git```
+```bash
+$ git clone https://github.com/okerefe/Inpuserparser.git
+```
+and then download the composer dependencies as shown:
 
-The username in the link should be your own username on bitbucket. so to be able to perform this command, you must have been given read access to the repository cause its private.
+```bash
+$ composer update
+```
 This is all you need to get the Wordpress plugin running
-although to run the tests the composer dependencies are to be installed
-We will cover that below
-
 
 ### Activation
 To activate the plugin. visit the plugins settings page on Wordpress's admin dashboard and you would find the plugin among the listings there: "InpUserParser".
@@ -103,38 +104,15 @@ The Plugin has also been Internationalized therefore it supports translation to 
 
 
 #### Unit Tests
-automated unit tests were also made available but there was no complete coverage.
-To run the tests on the plugin. the composer dependencies has to be loaded cause PHPUnit, the testing framework used for the tests was used as per project dependencies
-
-to install these dependencies. make sure that composer is installed.
-
-cd into the plugin directory and run composer update
-
-```$  composer update```
-
-this installs all the dependencies needed for the unit tests
-
-after that  
-run the command:
-
-```$  composer dump```
-
-on that same plugin directory. this loads all the needed classes that are to be included
-
-
-then run
-
-```$ ./vendor/bin/phpunit tests```
-
+extensive automated unit tests are also built in.
+to run the tests, run the command as shown:
+```bash
+$ ./vendor/bin/phpunit
+```
 This runs all the unit tests in the plugin
-
 #### Further Possible Improvements
 ##### Multi-Column Search Feature
-although this could be less faster but it could serve more. a multi-columns search feature would allow someone to search through all the given users by any of their properties. that means there will be no need to specify what column you wish to search by cause any search made will attempt to search all users and all their properties.
-
-##### More Comprehensive Test Coverage
-For now, there is not much unit test coverage because of the many external dependencies
-but with the proper tools and packages. more tests could be added to give better test coverage
+although this could be less fast, but it could serve more. a multi-columns search feature would allow someone to search through all the given users by any of their properties. that means there will be no need to specify what column you wish to search by cause any search made will attempt to search all users and all their properties.
 
 ##### Extensibility of Plugin
 Plugin could be made extensible and customizable via hooks to allow other plugins to use all its functionalities including the search feature, etc.
@@ -145,23 +123,3 @@ Please feel free to contribute and suggest for further improvements of this plug
 
 
 .
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

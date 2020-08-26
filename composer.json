@@ -1,8 +1,8 @@
 {
     "name": "okerefe/inpuserparser",
-    "description": "Package That Parses User Data",
+    "description": "Package That Parses User Data from a custom endpoint",
     "type": "wordpress-plugin",
-    "license": "GPL 3.0",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Umukoro Okerefe",
@@ -10,15 +10,22 @@
         }
     ],
     "autoload": {
-        "classmap": [
-            "includes/"
-        ]
+        "psr-4" : {
+            "InpUserParser\\" : "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4" : {
+            "InpUserParser\\" : "tests/unit/"
+        }
     },
     "require": {
-        "ext-json": "*"
+        "ext-json": "*",
+        "twig/twig": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
-        "inpsyde/php-coding-standards": "^0.13.4"
+        "inpsyde/php-coding-standards": "^0.13.4",
+        "brain/monkey": "2.*"
     }
 }

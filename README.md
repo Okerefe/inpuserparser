@@ -26,7 +26,7 @@ $ cd <wordpress-core path>/wp-content/plugins
 when you are in the plugin folder, clone the repo
 
 ```bash
-$ git clone https://github.com/okerefe/Inpuserparser.git
+$ git clone https://github.com/okerefe/inpuserparser.git
 ```
 and then download the composer dependencies as shown:
 

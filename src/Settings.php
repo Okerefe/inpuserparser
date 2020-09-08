@@ -490,10 +490,14 @@ class Settings
         $output = '';
         foreach ($radioOptions as $value => $label) {
             $checked = \checked($selectedOptions === $value, true, false);
-            $field = '<label>';
-            $field .= '<input name="' . self::OPTION_NAME . '[' . $id . ']" type="radio" value="' .
-                $value . '"' . $checked . '> ';
-            $field .= '<span>' . $label . '</span></label><br />';
+            $field = sprintf(
+                '<label><input name="%1$s[%2$s]" type="radio" value="%3$s" %4$s><span>%5$s</span></label><br />',
+                self::OPTION_NAME,
+                $id,
+                $value,
+                $checked,
+                $label
+            );
             $output .= \wp_kses($field, self::ALLOWED_TAGS);
         }
         return $output;
@@ -530,10 +534,14 @@ class Settings
         }
 
         //Generate Check Box Output
-        $output = '<input id="' . self::OPTION_NAME . '_' . $id .
-            '" name="' . self::OPTION_NAME . '[' . $id . ']" type="checkbox" value="1"' .
-            $checked . ' ' . $disabled . '> ';
-        $output .= '<label for="' . self::OPTION_NAME . '_' . $id . '">' . $label . '</label>';
+        $output = sprintf(
+            '<input id="%1$s_%2$s" name="%1$s[%2$s]" type="checkbox" value="1" %3$s %4$s><label for="%1$s_%2$s">%5$s</label>',
+            self::OPTION_NAME,
+            $id,
+            $checked,
+            $disabled,
+            $label
+        );
         return \wp_kses($output, self::ALLOWED_TAGS);
     }
 }

@@ -84,24 +84,24 @@ exit;
                 <p id="modal-error" class="text-danger" style="display: none;"></p>
                 <div id="user-contents" style="display: none;">
                     <p><span class="label"> Id:</span> <span class="value" id="id"> 4 </span> </p>
-                    <p><span class="label">Name:</span> <span class="value" id="name">Donald J Trump</span> </p>
-                    <p><span class="label">Username:</span> <span class="value" id="username">Donald J Trump</span> </p>
-                    <p><span class="label">Email    :</span> <span class="value" id="email">Donald J Trump</span> </p>
+                    <p><span class="label">Name:</span> <span class="value" id="name"></span> </p>
+                    <p><span class="label">Username:</span> <span class="value" id="username"></span> </p>
+                    <p><span class="label">Email    :</span> <span class="value" id="email"></span> </p>
                     <p><span class="label">Address:</span></p>
-                    <p><span class="label">&emsp;Street:</span>  <span class="value" id="street">Kulas Light</span></p>
-                    <p><span class="label">&emsp;Suite:</span>  <span class="value" id="suite">Kulas Light</span></p>
-                    <p><span class="label">&emsp;City:</span>  <span class="value" id="city">Kulas Light</span></p>
-                    <p><span class="label">&emsp;Zipcode:</span>  <span class="value" id="zipcode">Kulas Light</span></p>
+                    <p><span class="label">&emsp;Street:</span>  <span class="value" id="street"></span></p>
+                    <p><span class="label">&emsp;Suite:</span>  <span class="value" id="suite"></span></p>
+                    <p><span class="label">&emsp;City:</span>  <span class="value" id="city"></span></p>
+                    <p><span class="label">&emsp;Zipcode:</span>  <span class="value" id="zipcode"></span></p>
                     <p>&emsp;<span class="label">Geo:</span></p>
-                    <p><span class="label">&emsp;&emsp;Lat:</span>  <span class="value" id="lat">Kulas Light</span></p>
-                    <p><span class="label">&emsp;&emsp;Lng:</span>  <span class="value" id="lng">Kulas Light</span></p>
+                    <p><span class="label">&emsp;&emsp;Lat:</span>  <span class="value" id="lat"></span></p>
+                    <p><span class="label">&emsp;&emsp;Lng:</span>  <span class="value" id="lng"></span></p>
 
-                    <p><span class="label">Phone:</span> <span class="value" id="phone">58383843</span> </p>
-                    <p><span class="label">Website:</span> <span class="value" id="website">www.ffdwewed.org</span> </p>
+                    <p><span class="label">Phone:</span> <span class="value" id="phone"></span> </p>
+                    <p><span class="label">Website:</span> <span class="value" id="website"></span> </p>
                     <p><span class="label">Company:</span></p>
-                    <p><span class="label">&emsp;Name:</span>  <span class="value" id="companyName">Kulas Light</span></p>
-                    <p><span class="label">&emsp;Catch Phrase:</span>  <span class="value" id="companyCatchPhrase">Kulas Light</span></p>
-                    <p><span class="label">&emsp;Bs:</span>  <span class="value" id="companyBs">Kulas Light</span></p>
+                    <p><span class="label">&emsp;Name:</span>  <span class="value" id="companyName"></span></p>
+                    <p><span class="label">&emsp;Catch Phrase:</span>  <span class="value" id="companyCatchPhrase"></span></p>
+                    <p><span class="label">&emsp;Bs:</span>  <span class="value" id="companyBs"></span></p>
                 </div>
             </div>
 

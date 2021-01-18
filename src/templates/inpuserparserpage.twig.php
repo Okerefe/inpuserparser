@@ -33,7 +33,7 @@ exit;
     <!-- Search form Section-->
     <div class="row" style="padding: 2px;">
         <div class="md-form active-purple active-purple-2 mb-3 mt-0 col-8" style="margin: 0px !important; padding:0px;border-style: none;">
-            <input class="form-control" type="text" placeholder="Search By" id="search-input" aria-label="Search">
+            <input class="form-control" type="text" placeholder="Search By" id="search-users-input" aria-label="Search">
         </div>
 
         <div class="col-2" style="margin:0px;padding:0px;border-style:none;">

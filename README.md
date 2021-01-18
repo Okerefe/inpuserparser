@@ -26,7 +26,7 @@ $ cd <wordpress-core path>/wp-content/plugins
 when you are in the plugin folder, clone the repo
 
 ```bash
-$ git clone https://username@bitbucket.org/ravenedwriter/inpuserparser.git
+$ git clone https://github.com/Okerefe/inpuserparser.git
 ```
 after which you would cd into the plugin directory:
 ```bash

@@ -26,7 +26,8 @@ const handleResponse = (jsonResponse, requestType) =>
             _id('error').innerHTML=json.reply;
             $('#spinner-cover').slideUp(200, function () {
                 _id('error').style.display = "block";
-            });        }
+            });
+        }
         if (json.success == 'true') {
             $('#spinner-cover').slideUp(200, function () {
                 _id('table-cover').innerHTML = json.reply;

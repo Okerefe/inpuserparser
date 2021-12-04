@@ -18,7 +18,7 @@ use Twig;
  * This Functionality includes displaying settings page,
  * Validating and Saving Settings Form and more...
  *
- * @author  DeRavenedWriter <deravenedwriter@gmail.com>
+ * @author  DeRavenedWriter <okerefe@gmail.com>
  * @package InpUserParser
  * @license https://www.gnu.org/licenses/gpl-2.0.txt
  */

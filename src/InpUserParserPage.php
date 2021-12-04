@@ -17,7 +17,7 @@ use Twig;
  * This Class co-ordinates all functionality involved with displaying Front Page including
  * Parsing associated request, and generating the page for the request
  *
- * @author  DeRavenedWriter <deravenedwriter@gmail.com>
+ * @author  DeRavenedWriter <okerefe@gmail.com>
  * @package InpUserParser
  * @license https://www.gnu.org/licenses/gpl-2.0.txt
  */

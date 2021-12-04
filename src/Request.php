@@ -18,7 +18,7 @@ use Twig;
  * This Functionality includes Determining and Verifying user requests
  * and providing adequate responses
  *
- * @author  DeRavenedWriter <deravenedwriter@gmail.com>
+ * @author  DeRavenedWriter <okerefe@gmail.com>
  * @package InpUserParser
  * @license https://www.gnu.org/licenses/gpl-2.0.txt
  */

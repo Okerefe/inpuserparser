@@ -13,7 +13,7 @@ namespace InpUserParser;
  * Class That Defines the User Instance
  *
  *
- * @author  DeRavenedWriter <deravenedwriter@gmail.com>
+ * @author  DeRavenedWriter <okerefe@gmail.com>
  * @package InpUserParser
  * @license https://www.gnu.org/licenses/gpl-2.0.txt
  */

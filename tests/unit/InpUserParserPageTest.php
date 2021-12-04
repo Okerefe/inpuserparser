@@ -65,10 +65,10 @@ final class InpUserParserPageTest extends InpUserParserTest
     public function ifInitWorks()
     {
         (new InpUserParserPage())->init();
-        self::assertTrue(has_action('init', 'InpUserParser\InpUserParserPage->addRewriteRule()'));
-        self::assertTrue(has_action('plugins_loaded', 'InpUserParser\InpUserParserPage->loadTextDomain()'));
-        self::assertTrue(has_action('parse_request', 'InpUserParser\InpUserParserPage->parseRequest()'));
-        self::assertTrue(has_filter('query_vars', 'InpUserParser\InpUserParserPage->inputQueryVars()'));
+        self::assertNotFalse(has_action('init', 'InpUserParser\InpUserParserPage->addRewriteRule()'));
+        self::assertNotFalse(has_action('plugins_loaded', 'InpUserParser\InpUserParserPage->loadTextDomain()'));
+        self::assertNotFalse(has_action('parse_request', 'InpUserParser\InpUserParserPage->parseRequest()'));
+        self::assertNotFalse(has_filter('query_vars', 'InpUserParser\InpUserParserPage->inputQueryVars()'));
     }
 
     /** @test */

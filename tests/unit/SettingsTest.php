@@ -25,9 +25,9 @@ final class SettingsTest extends InpUserParserTest
     public function ifInitWorks()
     {
         (new Settings())->init();
-        self::assertTrue(has_action('admin_menu', 'InpUserParser\Settings->addMenu()'));
-        self::assertTrue(has_action('admin_init', 'InpUserParser\Settings->registerSettings()'));
-        self::assertTrue(has_filter(
+        self::assertNotFalse(has_action('admin_menu', 'InpUserParser\Settings->addMenu()'));
+        self::assertNotFalse(has_action('admin_init', 'InpUserParser\Settings->registerSettings()'));
+        self::assertNotFalse(has_filter(
             'plugin_action_links_inpuserparser/inpuserparser.php',
             'InpUserParser\Settings->addSettingsLink()'
         ));

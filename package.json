@@ -1,0 +1,42 @@
+{
+  "name": "InpUserParser",
+  "version": "1.0.0",
+  "description": "Package That Parses User Data from a custom endpoint",
+  "scripts": {
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "npm run development -- --watch",
+    "watch-poll": "npm run watch -- --watch-poll",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --disable-host-check --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "prod": "npm run production",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watchh": "mocha-webpack --webpack-config =node_modules/laravel-mix/setup/webpack.config.js --watch --require test/setup.js test/*.spec.js",
+    "test": "node_modules/.bin/jest --webpack-config=node_modules/laravel-mix/setup/webpack.config.js --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/okerefe/Inpuserparser.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/okerefe/Inpuserparser/issues"
+  },
+  "homepage": "https://github.com/okerefe/Inpuserparser#readme",
+  "dependencies": {
+    "vue": "^2.6.14"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.2.21",
+    "@vue/test-utils": "^1.2.2",
+    "babel-core": "^7.0.0-bridge.0",
+    "cross-env": "^7.0.3",
+    "jest": "^26.6.3",
+    "vue-jest": "^3.0.7",
+    "jsdom-global": "^3.0.2",
+    "laravel-mix": "^6.0.37",
+    "vue-loader": "^15.9.8",
+    "vue-template-compiler": "^2.6.14"
+  }
+}

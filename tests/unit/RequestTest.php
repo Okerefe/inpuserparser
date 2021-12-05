@@ -484,7 +484,7 @@ final class RequestTest extends InpUserParserTest
             ->getMock();
 
         $request = $this->getMockBuilder(Request::class)
-            ->onlyMethods(['userGen', 'generateTable'])
+            ->onlyMethods(['userGen', 'visibleColumns'])
             ->getMock();
 
         $userGen->expects($this->once())
@@ -496,10 +496,15 @@ final class RequestTest extends InpUserParserTest
             ->willReturn($userGen);
 
         $request->expects($this->once())
-            ->method('generateTable')
-            ->with([$this->user()])
-            ->willReturn("receivedusers");
-        $this->assertSame("receivedusers", $request->all());
+            ->method('visibleColumns')
+            ->willReturn(['field1', 'field2']);
+
+        $response = $request->all();
+        $this->assertArrayHasKey('users', $response);
+        $this->assertArrayHasKey('columns', $response);
+        $this->assertSame(['field1', 'field2'], $response['columns']);
+        $this->assertSame("Leanne Graham", $response['users'][0]->name);
+
     }
 
 

@@ -285,10 +285,11 @@ class Request
      * @throws InpUserParserException
      * @return string
      */
-    public function all(): string
+    public function all(): array
     {
         $users = $this->userGen()->allUsers();
-        return $this->generateTable($users);
+        return ['users' => $users, 'columns' => $this->visibleColumns()];
+        //return $this->generateTable($users);
     }
 
 

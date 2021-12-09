@@ -80,6 +80,11 @@ class InpUserParserPage
     public $isSearchFields = false;
 
     /**
+     * @var string Contains Plugin Hook for making Ajax Request
+     */
+    public $hook;
+
+    /**
      * @var bool If or not the page is built
      */
     public $isBuilt = false;
@@ -211,13 +216,14 @@ class InpUserParserPage
      */
     public function buildUp()
     {
-        $this->scriptUrl =  \esc_url(\plugins_url('/../public/js/script.js', __FILE__));
-        $this->styleUrl = \esc_url(\plugins_url('/../public/css/style.css', __FILE__));
+        $this->scriptUrl =  \esc_url(\plugins_url('/../public/js/min/script.js', __FILE__));
+        $this->styleUrl = \esc_url(\plugins_url('/../public/css/bootstrap.min.css', __FILE__));
         $this->nonce = \esc_attr(\wp_create_nonce('inpuserparser_hook'));
         $this->ajaxUrl = \esc_url(\admin_url('admin-ajax.php')); //esc url
         $this->heading = \esc_html__('InpUserParser', 'inpuserparser');
         $this->viewSearchText = \esc_html__('View and Search for Users Details from: ', 'inpuserparser');
         $this->canManageOptions = \current_user_can('manage_options');
+        $this->hook = "inpuserparser_hook";
 
         //settings from InpUserParser\Settings::getSettingsLink()
         $this->settingsText = '<p>' . \esc_html__('Visit InpUserParser', 'inpuserparser')

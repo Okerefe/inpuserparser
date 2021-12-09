@@ -47,6 +47,7 @@ final class InpUserParserPageTest extends InpUserParserTest
             ['somenonce'],
             ['someajaxurl'],
             ['someheading'],
+            ['somehook'],
             ['someviewsearchtext'],
             ['somesettingstext'],
             ['somesearchbytext'],
@@ -237,6 +238,7 @@ final class InpUserParserPageTest extends InpUserParserTest
         $inpUserParserPage->nonce = 'somenonce';
         $inpUserParserPage->ajaxUrl = 'someajaxurl';
         $inpUserParserPage->heading = 'someheading';
+        $inpUserParserPage->hook = 'somehook';
         $inpUserParserPage->viewSearchText = 'someviewsearchtext';
         $inpUserParserPage->canManageOptions = true;
 
@@ -245,14 +247,15 @@ final class InpUserParserPageTest extends InpUserParserTest
 
         $inpUserParserPage->searchByText = 'somesearchbytext';
         $inpUserParserPage->searchFields = ['field1','field2', 'field3'];
-        $ucCase = Helpers::ucFields('field1'); //Check if the Uppercase Function is not Broken
         $inpUserParserPage->isSearchFields = true;
 
         $inpUserParserPage->expects($this->once())
             ->method('buildUp');
 
         $page = $inpUserParserPage->generatePage();
-        $this->assertStringContainsString($ucCase, $page);
+        $this->assertStringContainsString('field1', $page);
+        $this->assertStringContainsString('field2', $page);
+        $this->assertStringContainsString('field3', $page);
         $this->assertStringContainsString($value, $page);
     }
 

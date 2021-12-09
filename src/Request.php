@@ -225,12 +225,12 @@ class Request
      * This Functions handles the Delivery of every Id Based Request
      * It searches for a User by It's Id
      *
-     * @throws InpUserParserException
-     * @return array
+     * @throws InpUserParserException  Exception is thrown. would be caught by caller
+     * @return User
      */
-    public function id(): array
+    public function id(): User
     {
-        return $this->userGen()->userById((int) $this->post()['id'])->generateArray();
+        return $this->userGen()->userById((int) $this->post()['id']);
     }
 
     /**
@@ -265,7 +265,7 @@ class Request
      * @throws InpUserParserException
      * @return string
      */
-    public function search(): string
+    public function search(): array
     {
         $users = $this->userGen()->search(
             $this->post()[self::SEARCH_STR],
@@ -273,10 +273,12 @@ class Request
         );
 
         if (empty($users)) {
-            return "<p class='text-info'>Search param '{$this->post()[self::SEARCH_STR]}' Does not Match Any "
-                . $this->ucFields($this->post()[self::COLUMN]) . '</p>';
+            $error = "Search param '{$this->post()[self::SEARCH_STR]}' Does not Match Any "
+                . $this->ucFields($this->post()[self::COLUMN]);
+            return ['searchSuccess' => false, 'error' => $error];
+
         }
-        return $this->generateTable($users);
+        return ['searchSuccess' => true, 'users' => $users, 'columns' => $this->visibleColumns()];
     }
 
     /**
@@ -303,23 +305,4 @@ class Request
         return (new Settings())->visibleColumns();
     }
 
-    /**
-     * Generates table containing Given Users
-     *
-     * @param User[] $users
-     *
-     * @throws InpUserParserException
-     * @return string
-     */
-    public function generateTable(array $users): string
-    {
-        try {
-            return $this->templateEngine()->render(
-                self::TABLE_TEMPLATE,
-                ['users' => $users, 'columns' => $this->visibleColumns(), 'helper' => (new Helpers())]
-            );
-        } catch (Twig\Error\Error $e) {
-            throw new InpUserParserException("Failed Generating HTML View with Error: " . $e->getMessage());
-        }
-    }
 }

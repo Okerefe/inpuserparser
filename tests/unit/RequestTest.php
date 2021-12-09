@@ -330,10 +330,7 @@ final class RequestTest extends InpUserParserTest
     /** @test */
     public function idPasses()
     {
-        $user = $this->getMockBuilder(User::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['generateArray'])
-            ->getMock();
+        $user = $this->user();
 
         $userGen = $this->getMockBuilder(UserGenerator::class)
             ->onlyMethods(['userById'])
@@ -343,10 +340,6 @@ final class RequestTest extends InpUserParserTest
             ->onlyMethods(['userGen', 'post'])
             ->getMock();
 
-
-        $user->expects($this->once())
-            ->method('generateArray')
-            ->willReturn(['helloyou']);
 
         $userGen->expects($this->once())
             ->method('userById')
@@ -361,7 +354,8 @@ final class RequestTest extends InpUserParserTest
             ->method('post')
             ->willReturn(['id' => 100]);
 
-        $this->assertSame(['helloyou'], $request->id());
+        $response = $request->id();
+        $this->assertSame('Leanne Graham', $response->name);
     }
 
     /** @test */
@@ -416,7 +410,11 @@ final class RequestTest extends InpUserParserTest
             ->method('post')
             ->willReturn(['searchStr' => 'Sincere@', 'column' => 'email']);
 
-        $this->assertStringContainsString("<p class='text-info'>", $request->search());
+        $response = $request->search();
+        $this->assertArrayHasKey('searchSuccess', $response);
+        $this->assertNotTrue($response['searchSuccess']);
+        $this->assertStringContainsString("Search param 'Sincere@' Does not Match Any Email", $response['error']);
+
     }
 
 
@@ -428,7 +426,7 @@ final class RequestTest extends InpUserParserTest
             ->getMock();
 
         $request = $this->getMockBuilder(Request::class)
-            ->onlyMethods(['userGen', 'post', 'generateTable'])
+            ->onlyMethods(['userGen', 'post', 'visibleColumns'])
             ->getMock();
 
         $userGen->expects($this->once())
@@ -441,15 +439,20 @@ final class RequestTest extends InpUserParserTest
             ->willReturn($userGen);
 
         $request->expects($this->once())
-            ->method('generateTable')
-            ->with([$this->user()])
-            ->willReturn("receivedusers");
+            ->method('visibleColumns')
+            ->willReturn(['field1', 'field2']);
 
         $request->expects($this->exactly(2))
             ->method('post')
             ->willReturn(['searchStr' => 'Sincere@', 'column' => 'email']);
 
-        $this->assertSame("receivedusers", $request->search());
+        $response = $request->search();
+        $this->assertArrayHasKey('users', $response);
+        $this->assertArrayHasKey('columns', $response);
+        $this->assertArrayHasKey('searchSuccess', $response);
+        $this->assertNotFalse($response['searchSuccess']);
+        $this->assertSame(['field1', 'field2'], $response['columns']);
+        $this->assertSame("Leanne Graham", $response['users'][0]->name);
     }
 
     /** @test */
@@ -507,123 +510,4 @@ final class RequestTest extends InpUserParserTest
 
     }
 
-
-    /** @test */
-    public function ifGeneratorTableWorks()
-    {
-
-        $columns =  [
-            'id',
-            'name',
-            'username',
-        ];
-
-        $twigEnviron = $this->getMockBuilder(\Twig\Environment::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['render'])
-            ->getMock();
-
-        $request = $this->getMockBuilder(Request::class)
-            ->onlyMethods(['templateEngine', 'visibleColumns'])
-            ->getMock();
-
-        $twigEnviron->expects($this->once())
-            ->method('render')
-            ->with(
-                Request::TABLE_TEMPLATE,
-                ['users' => [$this->user()], 'columns' => $columns, 'helper' => (new Helpers())]
-            )
-            ->willReturn("Test");
-
-        $request->expects($this->once())
-            ->method('templateEngine')
-            ->willReturn($twigEnviron);
-
-        $request->expects($this->once())
-            ->method('visibleColumns')
-            ->willReturn($columns);
-
-        $request->generateTable([$this->user()]);
-    }
-
-    /** @test */
-    public function ifGeneratorTableThrowsException()
-    {
-
-        $columns =  [
-            'id',
-            'name',
-            'username',
-        ];
-
-        $twigEnviron = $this->getMockBuilder(\Twig\Environment::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['render'])
-            ->getMock();
-
-        $request = $this->getMockBuilder(Request::class)
-            ->onlyMethods(['templateEngine', 'visibleColumns'])
-            ->getMock();
-
-        $twigEnviron->expects($this->once())
-            ->method('render')
-            ->with(
-                Request::TABLE_TEMPLATE,
-                ['users' => [$this->user()], 'columns' => $columns, 'helper' => (new Helpers())]
-            )
-            ->willThrowException(new \Twig\Error\Error('someerrors'));
-
-        $request->expects($this->once())
-            ->method('templateEngine')
-            ->willReturn($twigEnviron);
-
-        $request->expects($this->once())
-            ->method('visibleColumns')
-            ->willReturn($columns);
-
-        $this->expectException('InpUserParser\\InpUserParserException');
-        $request->generateTable([$this->user()]);
-    }
-
-
-    /** @test
-     * @dataProvider dataForTableTemplateBug
-     * Integration Test for GenerateTables Interaction with the Template Engine
-     * We ought to see that there is no bug in the templates..
-     */
-    public function ifTableTemplateIsBugFree($column)
-    {
-        $columns = [
-            'id',
-            'name',
-            'username',
-            'email',
-            'street',
-            'suite',
-            'city',
-            'zipcode',
-            'lat',
-            'lng',
-            'phone',
-            'website',
-            'companyName',
-            'companyCatchPhrase',
-            'companyBs',
-        ];
-
-        $request = $this->getMockBuilder(Request::class)
-            ->onlyMethods(['visibleColumns'])
-            ->getMock();
-
-        $request->expects($this->exactly(2))
-            ->method('visibleColumns')
-            ->willReturn($columns);
-
-
-        $this->assertStringContainsString(
-            "showDetail(" .$this->user()->id . ");",
-            $request->generateTable([$this->user()])
-        );
-        $this->assertStringContainsString($this->user()->$column, $request->generateTable([$this->user()]));
-    }
 }

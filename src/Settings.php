@@ -112,7 +112,7 @@ class Settings
     public function addSettingsLink(array $links): array
     {
         // Adds the link to the end of the array.
-        \array_push(
+        \array_unshift(
             $links,
             $this->getSettingsLink()
         );

@@ -25,69 +25,20 @@ class InpUserParserPage
 {
 
     /**
-     * @var string Contains PublicUrl of Script File
+     * @var array Associative Array Containing Properies of Page to be built.
      */
-    public $scriptUrl;
+
+    protected $pageProperties;
 
     /**
-     * @var string Contains PublicUrl of Css File
+     * @var bool Stores boolean state weather or not a User can manage options.
      */
-    public $styleUrl;
-
-    /**
-     * @var string Contains nonce for verification
-     */
-    public $nonce;
-
-    /**
-     * @var string Contains PublicUrl for submitting Ajax request
-     */
-    public $ajaxUrl;
-
-    /**
-     * @var string Contains Heading of Page
-     */
-    public $heading;
-
-    /**
-     * @var string Contains Text used in front Page
-     */
-    public $viewSearchText;
-
-    /**
-     * @var bool If or not a user can manage options
-     */
-    public $canManageOptions;
-
-    /**
-     * @var string Contains String of Settings text
-     */
-    public $settingsText;
-
-    /**
-     * @var string Contains String for Search By
-     */
-    public $searchByText;
-
-    /**
-     * @var string[] Contains Array Of Search Fields
-     */
-    public $searchFields;
-
-    /**
-     * @var bool If or not Search Field is enabled
-     */
-    public $isSearchFields = false;
-
-    /**
-     * @var string Contains Plugin Hook for making Ajax Request
-     */
-    public $hook;
+    protected $canManageOptions;
 
     /**
      * @var bool If or not the page is built
      */
-    public $isBuilt = false;
+    protected $isBuilt = false;
 
     /**
      * @var string Contains Constant of Query Var
@@ -98,7 +49,6 @@ class InpUserParserPage
      * @var string Contains Name of InpUserParser Front Page Template
      */
     const PAGE_TEMPLATE ='inpuserparserpage.twig.php';
-
 
     /**
      * Initializes all needed Hooks needed to Parse Request and intercept associated ones
@@ -113,7 +63,6 @@ class InpUserParserPage
         \add_filter('query_vars', [$this, 'inputQueryVars']);
     }
 
-
     /**
      * Formats and Change first character to uppercase
      *
@@ -121,11 +70,10 @@ class InpUserParserPage
      *
      * @return  string
      */
-    public function ucField($field)
+    public function ucField(string $field) : string
     {
         return Helpers::ucFields($field);
     }
-
 
     /**
      * Triggers the loading of the languages dir
@@ -159,7 +107,6 @@ class InpUserParserPage
         $queryVars[] = self::QUERY_VAR;
         return $queryVars;
     }
-
 
     /**
      * Exit's Request
@@ -195,9 +142,10 @@ class InpUserParserPage
      */
     public function loadPage()
     {
+        // Output won't be escapes cause it's various parts
+        // Have been escaped while building up
         echo $this->generatePage();
     }
-
 
     /**
      * Returns Link to InpUserParser Settings Page
@@ -206,7 +154,7 @@ class InpUserParserPage
      */
     public function settingsLink(): string
     {
-        return (new Settings())->getSettingsLink();
+        return (new Settings())->settingsLink();
     }
 
     /**
@@ -216,25 +164,61 @@ class InpUserParserPage
      */
     public function buildUp()
     {
-        $this->scriptUrl =  \esc_url(\plugins_url('/../public/js/min/script.js', __FILE__));
-        $this->styleUrl = \esc_url(\plugins_url('/../public/css/bootstrap.min.css', __FILE__));
-        $this->nonce = \esc_attr(\wp_create_nonce('inpuserparser_hook'));
-        $this->ajaxUrl = \esc_url(\admin_url('admin-ajax.php')); //esc url
-        $this->heading = \esc_html__('InpUserParser', 'inpuserparser');
-        $this->viewSearchText = \esc_html__('View and Search for Users Details from: ', 'inpuserparser');
-        $this->canManageOptions = \current_user_can('manage_options');
-        $this->hook = "inpuserparser_hook";
+        $this->pageProperties['scriptUrl'] =
+            \esc_url(\plugins_url('/../public/js/min/script.js', __FILE__));
+        $this->pageProperties['styleUrl'] =
+            \esc_url(\plugins_url('/../public/css/bootstrap.min.css', __FILE__));
+        $this->pageProperties['nonce'] =
+            \esc_attr(\wp_create_nonce('inpuserparser_hook'));
+        $this->pageProperties['ajaxUrl'] = \esc_url(\admin_url('admin-ajax.php')); //esc url
+        $this->pageProperties['heading'] = \esc_html__('InpUserParser', 'inpuserparser');
+        $this->pageProperties['viewSearchText'] =
+            \esc_html__('View and Search for Users Details from: ', 'inpuserparser');
+        $this->pageProperties['hook'] = "inpuserparser_hook";
 
         //settings from InpUserParser\Settings::getSettingsLink()
-        $this->settingsText = '<p>' . \esc_html__('Visit InpUserParser', 'inpuserparser')
+        $this->pageProperties['settingsText'] = '<p>' . \esc_html__('Visit InpUserParser', 'inpuserparser')
             . ' ' . $this->settingsLink() . '</p>';
 
-        $this->searchByText = \esc_html__("Search By:", 'inpuserparser');
-        $this->searchFields = $this->searchFields();
-        if (!empty($this->searchFields)) {
-            $this->isSearchFields = true;
-        }
+        $this->pageProperties['searchByText'] = \esc_html__("Search By:", 'inpuserparser');
+
+        $this->canManageOptions = \current_user_can('manage_options');
+
         $this->isBuilt = true;
+    }
+
+    /**
+     * Wrapper Function to return count of SearchFields
+     **
+     * @return  int
+     */
+    public function searchFieldCount() : int
+    {
+        return count($this->searchFields());
+    }
+
+    /**
+     * Returns Value of the CanManageOptions variable
+     **
+     * @return  boolean
+     */
+    public function canManageOptions() : bool
+    {
+        return $this->canManageOptions;
+    }
+
+    /**
+     * Returns Requested Properties of the Page
+     *
+     * @param String $field    Page Property been requested.
+     *
+     * @return  string
+     */
+    public function pageProperty(string $field) : string
+    {
+        if (array_key_exists($field, $this->pageProperties)) {
+            return $this->pageProperties[$field];
+        }
     }
 
     /**
@@ -258,21 +242,22 @@ class InpUserParserPage
         return new Twig\Environment($loader);
     }
 
-
     /**
      * Returns the Generated InpUserParser Front Page
      *
      * @throws InpUserParserException
      * @return  string
      */
-    public function generatePage()
+    public function generatePage() : string
     {
         $this->buildUp();
 
         try {
             return $this->templateEngine()->render(self::PAGE_TEMPLATE, ['page' => $this]);
-        } catch (Twig\Error\Error $e) {
-            throw new InpUserParserException("Failed Generating InpUserParser Page with Error: " . $e->getMessage());
+        } catch (Twig\Error\Error $error) {
+            throw new InpUserParserException(
+                "Failed Generating InpUserParser Page with Error: " . $error->getMessage()
+            );
         }
     }
 }

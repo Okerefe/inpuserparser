@@ -62,16 +62,16 @@ class Request
     /**
      * @var string Contains name of the Type of Request.
      * which is the name of the function that handles it
+     * NB: Property is set to public because assertions are made on it
      */
     public $requestResource;
-
 
     /**
      * @var bool State of the Request
      * If true, it means the Request is valid and builtUp
+     * NB: Property is set to public because assertions are made on it
      */
     public $isBuilt = false;
-
 
     /**
      * Initializes all needed Hooks needed to detect Ajax Requests
@@ -141,7 +141,6 @@ class Request
      */
     public function handle()
     {
-
         \check_ajax_referer('inpuserparser_hook', 'nonce');
         try {
             $this->buildUp();
@@ -155,7 +154,6 @@ class Request
             \wp_die();
         }
     }
-
 
     /**
      * Builds up and validates Request
@@ -218,7 +216,6 @@ class Request
         );
     }
 
-
     /**
      * Returns a given User by searching for it's Id
      *
@@ -242,7 +239,6 @@ class Request
     {
         return new UserGenerator();
     }
-
 
     /**
      * Formats and Change first character to uppercase
@@ -276,7 +272,6 @@ class Request
             $error = "Search param '{$this->post()[self::SEARCH_STR]}' Does not Match Any "
                 . $this->ucFields($this->post()[self::COLUMN]);
             return ['searchSuccess' => false, 'error' => $error];
-
         }
         return ['searchSuccess' => true, 'users' => $users, 'columns' => $this->visibleColumns()];
     }
@@ -294,7 +289,6 @@ class Request
         //return $this->generateTable($users);
     }
 
-
     /**
      * Returns all Visible Columns from Settings
      *
@@ -304,5 +298,4 @@ class Request
     {
         return (new Settings())->visibleColumns();
     }
-
 }

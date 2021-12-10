@@ -26,12 +26,4 @@ final class UserTest extends InpUserParserTest
         $this->assertSame($expected, $actual);
     }
 
-    /** @test
-     *  @dataProvider dataForUserValidity
-     */
-    public function generateArray($expected)
-    {
-        $err =  "User::generateArray not consistent";
-        $this->assertContains($expected, $this->user()->generateArray(), $err);
-    }
 }

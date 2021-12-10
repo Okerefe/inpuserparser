@@ -31,7 +31,7 @@ class InpUserParserException extends \Exception
      *
      * @return  InpUserParserException
      */
-    public function setErrorMessage($message) : InpUserParserException
+    public function updateErrorMessage(string $message) : InpUserParserException
     {
         $this->message = $message;
         return $this;
@@ -44,7 +44,7 @@ class InpUserParserException extends \Exception
      *
      * @return  InpUserParserException
      */
-    public function setToUserError(int $id) : InpUserParserException
+    public function updateToUserError(int $id) : InpUserParserException
     {
         $this->message = "Could not Fetch User with Id:" . $id;
         return $this;

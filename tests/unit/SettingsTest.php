@@ -36,7 +36,7 @@ final class SettingsTest extends InpUserParserTest
 
 
     /** @test */
-    public function ifGetSettingsLinkWorks()
+    public function ifSettingsLinkWorks()
     {
         Functions\expect('get_admin_url')
             ->once()
@@ -52,18 +52,18 @@ final class SettingsTest extends InpUserParserTest
             ->with('testpassed')
             ->andReturn('testhaspassed');
 
-        $this->assertStringContainsString('testhaspassed', (new Settings())->getSettingsLink());
+        $this->assertStringContainsString('testhaspassed', (new Settings())->settingsLink());
     }
 
     /** @test */
     public function ifAddSettingsLinkWorks()
     {
         $settings = $this->getMockBuilder(Settings::class)
-            ->onlyMethods(['getSettingsLink'])
+            ->onlyMethods(['settingsLink'])
             ->getMock();
 
         $settings->expects($this->once())
-            ->method('getSettingsLink')
+            ->method('settingsLink')
             ->willReturn('somesettings');
 
         $this->assertSame(['somesettings'], $settings->addSettingsLink([]));

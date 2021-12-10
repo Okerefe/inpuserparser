@@ -20,6 +20,8 @@ namespace InpUserParser;
 class User
 {
 
+    //NB: Property is set to public because assertions are made on it
+    //Property Values are above 10 because they are all needed
     public $id;
     public $name;
     public $username;
@@ -50,7 +52,6 @@ class User
             'companyName',
         ];
 
-
     /**
      * @var array Contains Array of Default Column of Users
      */
@@ -59,7 +60,6 @@ class User
             'name',
             'username',
         ];
-
 
     /**
      * Constructs the User Object
@@ -99,6 +99,7 @@ class User
         string $companyCatchPhrase,
         string $companyBs
     ) {
+
         $this->id = $id;
         $this->name = $name;
         $this->username = $username;
@@ -116,17 +117,4 @@ class User
         $this->companyBs = $companyBs;
     }
 
-    /**
-     * Returns an Assoc Array of User Properties and Values
-     *
-     * @return  array
-     */
-    public function generateArray() : array
-    {
-        $userArray = [];
-        foreach ($this as $var => $value) {
-            $userArray[$var] = $value;
-        }
-        return $userArray;
-    }
 }

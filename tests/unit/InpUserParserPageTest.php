@@ -30,9 +30,7 @@ final class InpUserParserPageTest extends InpUserParserTest
             ['nonce'],
             ['ajaxUrl'],
             ['viewSearchText'],
-            ['canManageOptions'],
             ['settingsText'],
-            ['canManageOptions'],
             ['settingsText'],
             ['searchByText'],
         ];
@@ -209,16 +207,13 @@ final class InpUserParserPageTest extends InpUserParserTest
             ->getMock();
 
         $inpUserParserPage->expects($this->once())
-            ->method('searchFields')
-            ->willReturn([]);
-
-        $inpUserParserPage->expects($this->once())
             ->method('settingsLink')
             ->willReturn('just testing stuffs');
 
         $inpUserParserPage->buildUp();
 
-        $this->assertStringContainsString('just testing stuffs', $inpUserParserPage->$property);
+        // canManageOptions property is not tested here cause it's a boolean
+        $this->assertStringContainsString('just testing stuffs', $inpUserParserPage->pageProperty($property));
     }
 
 
@@ -230,24 +225,45 @@ final class InpUserParserPageTest extends InpUserParserTest
     public function ifTwigRendersWellThroughGeneratePage($value)
     {
         $inpUserParserPage = $this->getMockBuilder(InpUserParserPage::class)
-            ->onlyMethods(['buildUp'])
+            ->onlyMethods(['buildUp', 'pageProperty', 'searchFields', 'canManageOptions', 'searchFieldCount'])
             ->getMock();
 
-        $inpUserParserPage->scriptUrl =  'somescripturl';
-        $inpUserParserPage->styleUrl = 'somestyleurl';
-        $inpUserParserPage->nonce = 'somenonce';
-        $inpUserParserPage->ajaxUrl = 'someajaxurl';
-        $inpUserParserPage->heading = 'someheading';
-        $inpUserParserPage->hook = 'somehook';
-        $inpUserParserPage->viewSearchText = 'someviewsearchtext';
-        $inpUserParserPage->canManageOptions = true;
+        $inpUserParserPage->expects($this->any())
+            ->method('pageProperty')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['scriptUrl', 'somescripturl'],
+                        ['styleUrl', 'somestyleurl'],
+                        ['nonce', 'somenonce'],
+                        ['ajaxUrl','someajaxurl'],
+                        ['heading' ,'someheading'],
+                        ['hook','somehook'],
+                        ['viewSearchText', 'someviewsearchtext'],
+                        ['settingsText','somesettingstext'],
+                        ['searchByText', 'somesearchbytext'],
+                    ]
+                )
+            );
+
+        $inpUserParserPage->expects($this->once())
+            ->method('searchFields')
+            ->willReturn(['field1','field2', 'field3']);
+
+        $inpUserParserPage->expects($this->once(1))
+            ->method('searchFieldCount')
+            ->willReturn(3);
+
+        $inpUserParserPage->expects($this->once())
+            ->method('canManageOptions')
+            ->willReturn(true);
+
+
+        //['canManageOptions = true;
 
         //settings from InpUserParser\Settings::getSettingsLink()
-        $inpUserParserPage->settingsText = 'somesettingstext';
-
-        $inpUserParserPage->searchByText = 'somesearchbytext';
-        $inpUserParserPage->searchFields = ['field1','field2', 'field3'];
-        $inpUserParserPage->isSearchFields = true;
+        //['searchFields' = ['field1','field2', 'field3'];
+        //$inpUserParserPage->isSearchFields = true;
 
         $inpUserParserPage->expects($this->once())
             ->method('buildUp');

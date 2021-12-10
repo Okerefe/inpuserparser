@@ -43,8 +43,8 @@ class UserGenerator
         try {
             $json = $this->fetchFromWeb(self::USERS_FETCH_URL . "/{$id}")['body'];
             return $this->extractUsersFromJsonObject([\json_decode($json)])[0];
-        } catch (InpUserParserException $e) {
-            throw $e->setToUserError($id);
+        } catch (InpUserParserException $error) {
+            throw $error->updateToUserError($id);
         }
     }
 
@@ -56,7 +56,7 @@ class UserGenerator
      * @throws InpUserParserException
      * @return array
      */
-    public function fetchFromWeb($uri) : array
+    public function fetchFromWeb(string $uri) : array
     {
         $args = [
             'method' => 'GET',
@@ -90,8 +90,8 @@ class UserGenerator
                 $usersJson = $response['body'];
                 $maxAge = $response['maxAge'];
                 \set_transient(self::USERS_TRANSIENT, $usersJson, $maxAge);
-            } catch (InpUserParserException $e) {
-                throw $e->setErrorMessage("Error While Fetching all Users Detail");
+            } catch (InpUserParserException $error) {
+                throw $error->updateErrorMessage("Error While Fetching all Users Detail");
             }
         }
         return $usersJson;
@@ -141,7 +141,6 @@ class UserGenerator
         return $this->extractUsersFromJsonObject(\json_decode($userJson));
     }
 
-
     /**
      * Searches and Returns Max-age by Regex Search
      *
@@ -155,9 +154,8 @@ class UserGenerator
         return (int)$match[1];
     }
 
-
     /**
-     * Searches and Returns Max-age by Regex Search
+     * Searches and Returns value if found
      *
      * @param string $searchStr     Search Str to search for
      * @param string $column        Column to Search from
@@ -168,16 +166,29 @@ class UserGenerator
     public function search(string $searchStr, string $column) : array
     {
         try {
-            $users = $this->allUsers();
-            $matchedUsers = [];
-            foreach ($users as $user) {
-                if (\strpos(\strtolower($user->$column), \strtolower($searchStr)) !== false) {
-                    $matchedUsers[] = $user;
-                }
-            }
-            return $matchedUsers;
-        } catch (InpUserParserException $e) {
-            throw $e->setErrorMessage("Error in Fetching User Detail to Perform Search");
+            return $this->performSearch($this->allUsers(), $searchStr, $column);
+        } catch (InpUserParserException $error) {
+            throw $error->updateErrorMessage("Error in Fetching User Detail to Perform Search");
         }
+    }
+
+    /**
+     * performs the actual searching algorithm
+     *
+     * @param string $users        Users to Search From
+     * @param string $searchStr     Search Str to search for
+     * @param string $column        Column to Search from
+     *
+     * @return User[]
+     */
+    public function performSearch(array $users, string $searchStr, string $column) : array
+    {
+        $matchedUsers = [];
+        foreach ($users as $user) {
+            if (\strpos(\strtolower($user->$column), \strtolower($searchStr)) !== false) {
+                $matchedUsers[] = $user;
+            }
+        }
+        return $matchedUsers;
     }
 }

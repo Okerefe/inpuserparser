@@ -68,8 +68,6 @@ class Settings
      */
     const SETTINGS_PAGE_TEMPLATE ='settings_page.twig.php';
 
-
-
     /**
      * Initializes all needed Hooks for the settings class
 
@@ -90,7 +88,7 @@ class Settings
      *
      * @return  string
      */
-    public function getSettingsLink(): string
+    public function settingsLink(): string
     {
         $url = \esc_url(\add_query_arg(
             'page',
@@ -100,7 +98,6 @@ class Settings
         // Create the link.
         return "<a href='$url'>Settings</a>";
     }
-
 
     /**
      * Add InpuserParser Settings Links to array of action links
@@ -114,11 +111,10 @@ class Settings
         // Adds the link to the end of the array.
         \array_unshift(
             $links,
-            $this->getSettingsLink()
+            $this->settingsLink()
         );
         return $links;
     }
-
 
     /**
      * Performs Uninstall Actions
@@ -133,7 +129,6 @@ class Settings
         \delete_transient(UserGenerator::USERS_TRANSIENT);
     }
 
-
     /**
      * Formats and Change first character to uppercase
      *
@@ -145,7 +140,6 @@ class Settings
     {
         return Helpers::ucFields($field);
     }
-
 
     /**
      * Adds InpuserParser Settings Page
@@ -164,7 +158,6 @@ class Settings
         );
     }
 
-
     /**
      * Returns a ready instance of the Twig Environment with templates Dir Loaded
      *
@@ -176,14 +169,13 @@ class Settings
         return new Twig\Environment($loader);
     }
 
-
     /**
      * Returns the Generated Settings Page
      *
      * @throws InpUserParserException
      * @return  string
      */
-    public function generatePage()
+    public function generatePage() : string
     {
         $settingsPage = (new class()
         {
@@ -197,14 +189,17 @@ class Settings
                 $this->previewUrl = \get_bloginfo('url') . '/?' . Settings::SETTINGS_PAGE;
                 $this->previewUrlText = \esc_html__('Preview InpuserParser Page', 'inpuserparser');
             }
+
             public function settingsField()
             {
                 \settings_fields(Settings::OPTION_NAME);
             }
+
             public function settingsSection()
             {
                 \do_settings_sections(Settings::SETTINGS_PAGE);
             }
+
             public function submitButton()
             {
                 \submit_button();
@@ -217,8 +212,10 @@ class Settings
                 self::SETTINGS_PAGE_TEMPLATE,
                 ['settingsPage' => $settingsPage]
             );
-        } catch (Twig\Error\Error $e) {
-            throw new InpUserParserException("Failed Generating Settings Page with Error: " . $e->getMessage());
+        } catch (Twig\Error\Error $error) {
+            throw new InpUserParserException(
+                "Failed Generating Settings Page with Error: " . $error->getMessage()
+            );
         }
     }
 
@@ -233,6 +230,9 @@ class Settings
         if (!\current_user_can('manage_options')) {
             return;
         }
+
+        // Output won't be escapes cause it's various parts
+        // Have been escaped while building up
         echo $this->generatePage();
     }
 
@@ -316,7 +316,6 @@ class Settings
         }
     }
 
-
     /**
      * Generates and Returns Default Settings Options Value
      *
@@ -335,7 +334,6 @@ class Settings
         return $returnArray;
     }
 
-
     /**
      * Returns an array of the Search Fields that are enabled to be visible
      *
@@ -346,12 +344,13 @@ class Settings
         $visibleSearches = [];
         $options = \get_option(self::OPTION_NAME, $this->defaultOptions());
         foreach (User::USED_FIELDS as $field) {
-            if (isset($options['search_settings_' . $field]) && (int)$options['search_settings_' . $field] === 1) {
+            if (isset($options['search_settings_' . $field]) &&
+                (int)$options['search_settings_' . $field] === 1) {
                 $visibleSearches[] = $field;
             }
         }
 
-        if ($options['search_settings_visible'] == 'disable') {
+        if ($options['search_settings_visible'] === 'disable') {
             return [];
         }
         return $visibleSearches;
@@ -374,13 +373,13 @@ class Settings
             if (\in_array($field, $visibleColumns, true)) {
                 continue;
             }
-            if (isset($options['column_settings_' . $field]) && (int)$options['column_settings_' . $field] === 1) {
+            if (isset($options['column_settings_' . $field]) &&
+                (int)$options['column_settings_' . $field] === 1) {
                 $visibleColumns[] = $field;
             }
         }
         return $visibleColumns;
     }
-
 
     /**
      * Echoes out content for Search Settings Section
@@ -392,7 +391,6 @@ class Settings
         echo \esc_html__('Customize the search Options Visible to the Users', 'inpuserparser');
     }
 
-
     /**
      * Echoes out content for Column Settings Section
      *
@@ -402,7 +400,6 @@ class Settings
     {
         echo \esc_html__('Customize the Columns that are visible to the Users', 'inpuserparser');
     }
-
 
     /**
      * Validate and Returns the Submitted Settings Form
@@ -426,7 +423,6 @@ class Settings
             $input['search_settings_visible'] = null;
         }
 
-
         foreach (User::DEFAULT_COLUMNS as $field) {
             $input['column_settings_' . $field] = 1;
         }
@@ -446,7 +442,6 @@ class Settings
         ];
     }
 
-
     /**
      * Echoes Out Radio Field
      *
@@ -456,6 +451,8 @@ class Settings
      */
     public function outputRadioField(array $args)
     {
+        // Output won't be escapes cause it's various parts
+        // Have been escaped while building up
         echo $this->generateRadioField($args);
     }
 
@@ -468,9 +465,10 @@ class Settings
      */
     public function outputCheckField(array $args)
     {
+        // Output won't be escapes cause it's various parts
+        // Have been escaped while building up
         echo $this->generateCheckField($args);
     }
-
 
     /**
      * Generates and returns Radio Field with the given required args
@@ -535,7 +533,8 @@ class Settings
 
         //Generate Check Box Output
         $output = sprintf(
-            '<input id="%1$s_%2$s" name="%1$s[%2$s]" type="checkbox" value="1" %3$s %4$s><label for="%1$s_%2$s">%5$s</label>',
+            '<input id="%1$s_%2$s" name="%1$s[%2$s]" type="checkbox" value="1" %3$s %4$s>'.
+            '<label for="%1$s_%2$s">%5$s</label>',
             self::OPTION_NAME,
             $id,
             $checked,

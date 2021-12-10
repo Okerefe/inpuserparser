@@ -233,15 +233,34 @@ final class UserGeneratorTest extends InpUserParserTest
     public function searchReturnsValue()
     {
         $userGen = $this->getMockBuilder(UserGenerator::class)
-            ->onlyMethods(['allUsers'])
+            ->onlyMethods(['allUsers', 'performSearch'])
             ->getMock();
 
-        $userGen->expects($this->exactly(2))
+        $userGen->expects($this->once())
+            ->method('performSearch')
+            ->willReturn([$this->user(), $this->user()]);
+
+        $userGen->expects($this->once())
             ->method('allUsers')
             ->willReturn([$this->user(), $this->user()]);
 
-        $this->assertSame(2, count($userGen->search('Sincere@', 'email')));
-        $this->assertInstanceOf(User::class, $userGen->search('Sincere@', 'email')[0]);
+        $searchResult = $userGen->search('Sincere@', 'email');
+        $this->assertSame(2, count($searchResult));
+        $this->assertInstanceOf(User::class, $searchResult[0]);
+    }
+
+
+    /** @test */
+    public function performSearchFindSearchEffetively()
+    {
+        $searchResult = (new UserGenerator())->performSearch(
+            [$this->user(), $this->user2()],
+            'sincere@',
+            'email'
+        );
+        $this->assertSame(1, count($searchResult));
+        $this->assertInstanceOf(User::class, $searchResult[0]);
+        $this->assertSame("Bret", $searchResult[0]->username);
     }
 
     /** @test */

@@ -1,7 +1,7 @@
 <?php
 // Exit if File is called Directly
 if (!defined('ABSPATH')) {
-exit;
+    exit;
 }
 ?>
 <!Doctype html>
@@ -10,23 +10,23 @@ exit;
     <title>InpUserParser</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="{{ page.styleUrl }}">
+    <link rel="stylesheet" href="{{ page.pageProperty('styleUrl') }}">
 </head>
 <body>
 <section class="container" id="container">
     <br><br><br>
-    <h2>{{ page.heading }}</h2>
-    <p>{{ page.viewSearchText }}<a href="#" onclick="return false;">https://jsonplaceholder.typicode.com/users</a></p>
-    {% if page.canManageOptions %}
-        {{ page.settingsText | raw }}
+    <h2>{{ page.pageProperty('heading') }}</h2>
+    <p>{{ page.pageProperty('viewSearchText') }}<a href="#" onclick="return false;">https://jsonplaceholder.typicode.com/users</a></p>
+    {% if page.canManageOptions() %}
+        {{ page.pageProperty('settingsText') | raw }}
     {% endif %}
 
-    {% if page.isSearchFields %}
+    {% if page.searchFieldCount() > 0 %}
     <!-- Search form Section-->
     <!-- Displays Search Form only when search fields is enabled-->
     <search
-        search-by-text="{{ page.searchByText }}"
-        :fields={{ page.searchFields|json_encode|raw }}
+        search-by-text="{{ page.pageProperty('searchByText') }}"
+        :fields={{ page.searchFields()|json_encode|raw }}
         v-on:searchstr="updateSearchStr($event)">
 
     </search>
@@ -40,13 +40,13 @@ exit;
     <users-table
         :search="search"
         :key="searchKey"
-        nonce='{{ page.nonce }}'
-        hook='{{ page.hook }}'
-        ajax-url='{{ page.ajaxUrl }}'>
+        nonce='{{ page.pageProperty('nonce') }}'
+        hook='{{ page.pageProperty('hook') }}'
+        ajax-url='{{ page.pageProperty('ajaxUrl') }}'>
     </users-table>
 
 </section>
 
-<script src="{{ page.scriptUrl }}"></script>
+<script src="{{ page.pageProperty('scriptUrl') }}"></script>
 </body>
 </html>

@@ -113,7 +113,16 @@ The front-end assets were compiled using laravel-mix. a package that provides an
 
 #### Compliance and Code standards
 The source code of the plugin was built with PHP 7 standards. while the front end was done with Vue.js
-The backend source code (apart from the unit tests) of the plugin is also compliant with the [`inpsyde code styles`](https://github.com/inpsyde/php-coding-standards)
+The backend source code (apart from the unit tests) of the plugin is also fully compliant with the [`inpsyde code styles`](https://github.com/inpsyde/php-coding-standards)
+
+Although, there are some minor parts of the code that don't comply with Inpsyde standards on certain lines of the source code files.
+To check Inpsyde sniffer Compliance, run the given command in project dir:
+```bash
+$ vendor/bin/phpcs --standard="Inpsyde" <file-path>
+```
+where <file-path> is the file or folder to be sniffed.
+
+Reasons for not complying are given in the line where the Inpsyde Sniffer detects those errors
 WordPress version 5.0 and later version have been tested with the plugin and fully supports it. earlier versions could support it but it has not been extensively tested yet.
 
 #### Internationalization
